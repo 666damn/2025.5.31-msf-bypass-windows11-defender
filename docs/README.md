@@ -19,8 +19,8 @@ This version **does not create persistence** and is safer for local testing.
 
 ## 📷 Screenshots
 
-### `loader_for_123.c` demo (adds to startup):
+### `loader_for_123.c` demo
 ![Loader Structure](assets/images/loader.png)
 
-### `loader.c` demo (memory execution only):
+### `loader.c` demo
 ![Example Screenshot](assets/images/123.png)
