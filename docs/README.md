@@ -85,4 +85,8 @@ This project is intended solely for educational and security research purposes.
 
 
 
-![visitors](https://visitor-badge.laobi.icu/badge?page_id=666damn.2025.5.31-msf-bypass-windows11-defender)
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=666damn&show_icons=true&theme=dark" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=666damn&layout=compact&theme=dark" />
+</p>
+
