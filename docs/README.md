@@ -82,3 +82,7 @@ This project is intended solely for educational and security research purposes.
 - 作者对任何非法用途或由此引发的后果概不负责。
 - 所有测试请仅在受控虚拟环境中进行。
 - 使用本项目即视为同意遵守相关法律法规及道德规范。
+
+
+
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=666damn.2025.5.31-msf-bypass-windows11-defender)
