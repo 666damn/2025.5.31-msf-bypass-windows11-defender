@@ -3,13 +3,18 @@
 123.exe在其中一台win11被实时保护查杀了
 123编译
 x86_64-w64-mingw32-gcc loader.c -o 123.exe -mwindows
+
 strip 123.exe
+
 upx --best 123.exe
 
 loader编译
-x86_64-w64-mingw32-gcc loader.c -o loader.exe -mwindows -O2 -s
+x86_64-w64-mingw32-gcc loader.c -o loader.exe -mwindows -O2 -s -nostartfiles -Wl,-e,mainCRTStartup
+
 strip loader.exe
+
 upx --ultra-brute loader.exe
+
 
 测试图
 123测试
