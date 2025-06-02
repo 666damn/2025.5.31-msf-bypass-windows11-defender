@@ -1,49 +1,63 @@
-🛡️ 2025.5.31 – Kali + msfvenom Bypass for Windows 11 Defender
-（2025.5.31 使用 Kali + msfvenom 绕过 Windows 11 Defender）
+# 🛡️ 2025.5.31 – Kali + msfvenom Bypass for Windows 11 Defender  
+**使用 Kali + msfvenom 绕过 Windows 11 Defender（适用于 Windows 11）**
 
-This repository demonstrates how to generate a Windows 11-compatible payload using msfvenom, and execute it via custom C loaders.
-Tested successfully on Windows 11.
-⚠️ Does NOT work on Windows 10.
+---
 
-本项目展示了如何使用 msfvenom 生成可在 Windows 11 上运行的免杀载荷，并通过自定义 C 编写的 loader 进行执行。
-已在 Windows 11 测试成功。
-⚠️ 无法在 Windows 10 上运行
+This repository demonstrates how to generate a Windows 11-compatible payload using `msfvenom`,  
+and execute it using two custom C loaders (`loader.c` and `loader_for_123.c`).
 
-⚠️ WARNING
-（⚠️ 警告）
+> 📌 **Tested:** ✅ Windows 11  
+> ❌ **Not working:** Windows 10
 
-The file loader_for_123.c enables startup folder persistence and registry Run key persistence
+本项目展示如何使用 `msfvenom` 生成适用于 Windows 11 的免杀载荷，  
+并通过两个自定义 C loader（`loader.c` 和 `loader_for_123.c`）实现执行。
 
-DO NOT run loader_for_123.c on your host machine
+> 📌 **测试平台：** ✅ Windows 11  
+> ❌ **不支持：** Windows 10
 
-Only test in isolated virtual Windows 11 environments
+---
 
-Cleanup requires manual removal from:
+## ⚠️ WARNING / 警告
 
-%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\123.exe
+**`loader_for_123.c` includes persistence and is NOT safe to run on your main machine.**  
+**Only run it in an isolated Windows 11 virtual machine.**
 
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+> **`loader_for_123.c` 包含持久化功能，不可在主机上运行。**  
+> 请仅在虚拟 Windows 11 环境中测试。
 
-loader_for_123.c 会在系统中设置 启动文件夹持久化 和 注册表自启动持久化
+Persistence behavior:
+- 📂 Copies itself to:  
+  `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\123.exe`
+- 🧾 Adds registry key:  
+  `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
 
-请不要在你本地真实系统上运行 loader_for_123.c
+持久化行为：
+- 📂 拷贝自身至：  
+  `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\123.exe`
+- 🧾 添加注册表启动项：  
+  `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
 
-请仅在隔离的虚拟 Windows 11 环境中进行测试
+🧹 **Manual cleanup required after testing!**
 
-清理需要手动删除以下位置中的持久化项：
+🧹 **测试结束后请手动清理！**
 
-%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\123.exe
+---
 
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+## 🧪 `loader.c` – Basic Loader (No Persistence)  
+### `loader.c` – 基础加载器（无持久化）
 
-🧪 loader.c – Basic Test (No Persistence)
-（🧪 loader.c – 基础测试版本，无持久化）
+- In-memory shellcode execution only  
+- XOR-decrypts payload at runtime (`key = 0x5C`)  
+- Safe to use for local shellcode testing  
+- No file copy, no registry, no persistence
 
-Use loader.c to test memory-only shellcode execution on your own machine.
-This version does not create persistence and is safer for local testing.
+- 执行纯内存 shellcode  
+- 运行时进行 XOR 解密（key = 0x5C）  
+- 可在本机安全测试  
+- 无文件拷贝、无注册表写入、无持久化行为
 
-使用 loader.c 可在本机测试纯内存 shellcode 加载执行。
-此版本不含任何持久化机制，适合进行相对安全的本地测试。
+---
+
 
 ## 📷 Screenshots
 
