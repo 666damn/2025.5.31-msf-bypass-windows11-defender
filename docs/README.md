@@ -1,7 +1,7 @@
 ## ⚠️ Attention / 注意
 
-## 目前6.2版本已经无法过测，因为在win11虚拟机测试的时候不小心提交了样本，请使用最新版本过测
-
+## 目前6.2版本已经无法过测，因为在win11虚拟机测试的时候没关自动提交样本不小心提交了样本，请使用最新版本过测
+## For now, version 6.2 is down, I forgot to turn off auto upload sample to microsoft and accidently upload the sample in virtual windows 11, Please use the newest version to bypass
 
 # 🛡️ 2025.5.31 – Kali + msfvenom Bypass for Windows 11 Defender  
 **使用 Kali + msfvenom 绕过 Windows 11 Defender（适用于 Windows 11）**
