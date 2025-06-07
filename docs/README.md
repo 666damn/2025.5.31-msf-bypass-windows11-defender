@@ -48,8 +48,8 @@ Persistence behavior:
 
 ---
 
-## 🧪 `loader.c` – Basic Loader (No Persistence)  
-### `loader.c` – 基础加载器（无持久化）
+## 🧪 `loader.c` – Basic Loader (No Persistence)  No Longer available
+### `loader.c` – 基础加载器（无持久化）无法使用
 
 - In-memory shellcode execution only  
 - XOR-decrypts payload at runtime (`key = 0x5C`)  
